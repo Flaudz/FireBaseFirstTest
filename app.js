@@ -8,10 +8,12 @@ const renderCafe = (doc) => {
 	let city = document.createElement("span");
 	let cross = document.createElement("div");
 
+	cross.classList.add("x");
+
 	li.setAttribute("data-id", doc.id);
 	name.textContent = doc.data().name;
 	city.textContent = doc.data().city;
-	cross.textContent = "x";
+	cross.textContent = "X";
 
 	li.appendChild(name);
 	li.appendChild(city);
