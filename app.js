@@ -29,13 +29,15 @@ const renderCafe = (doc) => {
 };
 
 // Getting data
-db.collection("cafes")
-	.get()
-	.then((snapshot) => {
-		snapshot.docs.forEach((doc) => {
-			renderCafe(doc);
-		});
-	});
+// db.collection("cafes")
+// 	.where("city", "==", "Assens")
+// 	.orderBy("name")
+// 	.get()
+// 	.then((snapshot) => {
+// 		snapshot.docs.forEach((doc) => {
+// 			renderCafe(doc);
+// 		});
+// 	});
 
 // Saving data
 form.addEventListener("submit", (e) => {
@@ -47,3 +49,18 @@ form.addEventListener("submit", (e) => {
 	form.name.value = "";
 	form.city.value = "";
 });
+
+// Real-Time Listener
+db.collection("cafes")
+	.orderBy("city")
+	.onSnapshot((snapshot) => {
+		let changes = snapshot.docChanges();
+		changes.forEach((change) => {
+			if (change.type == "added") {
+				renderCafe(change.doc);
+			} else if (change.type == "removed") {
+				let li = cafeList.querySelector("[data-id=" + change.doc.id + "]");
+				cafeList.removeChild(li);
+			}
+		});
+	});
